@@ -16,6 +16,8 @@ public class DeliveryManager : MonoBehaviour
     [SerializeField] private int waitingRecipesMax = 4;
 
     public static DeliveryManager Instance { get; private set; }
+
+    private int successfulRecipesAmount = 0;
     
     private List<RecipeSO> waitingRecipeSOList;
     private float spawnRecipeTimer = 0;
@@ -85,6 +87,7 @@ public class DeliveryManager : MonoBehaviour
 
                     OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
                     OnRecipeSuccess?.Invoke(this, EventArgs.Empty);
+                    successfulRecipesAmount++;
 
                     return;
                 }
@@ -98,5 +101,10 @@ public class DeliveryManager : MonoBehaviour
     public List<RecipeSO> GetWaitingRecipeSOList()
     {
         return waitingRecipeSOList;
+    }
+
+    public int GetSuccessfulRecipesAmount()
+    {
+        return successfulRecipesAmount;
     }
 }

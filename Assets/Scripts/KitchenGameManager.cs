@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class KitchenGameManager : MonoBehaviour
 {
+    [SerializeField] private float gamePlayingTimerMax = 10f;
     public static KitchenGameManager Instance { get; private set; }
 
     public event EventHandler OnStateChanged;
@@ -46,6 +47,7 @@ public class KitchenGameManager : MonoBehaviour
                 countdownToStartTimer -= Time.deltaTime;
                 if (countdownToStartTimer <= 0f)
                 {
+                    gamePlayingTimer = gamePlayingTimerMax;
                     state = State.GamePlaying;
                     OnStateChanged?.Invoke(this, EventArgs.Empty);
                 }
@@ -78,5 +80,15 @@ public class KitchenGameManager : MonoBehaviour
     public float GetCoundownToStartTimer()
     {
         return countdownToStartTimer;
+    }
+
+    public bool IsGameOver()
+    {
+        return state == State.GameOver;
+    }
+
+    public float GetGamePlayingTimerNormalized()
+    {
+        return 1 - (gamePlayingTimer / gamePlayingTimerMax);
     }
 }
