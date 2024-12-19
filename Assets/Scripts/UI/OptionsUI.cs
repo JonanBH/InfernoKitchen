@@ -33,6 +33,11 @@ public class OptionsUI : MonoBehaviour
     [SerializeField] private Button gamepadAlternateInteractButton;
     [SerializeField] private Button gamepadPauseButton;
 
+    [SerializeField] private TextMeshProUGUI moveDownButtonText;
+    [SerializeField] private TextMeshProUGUI moveUpButtonText;
+    [SerializeField] private TextMeshProUGUI moveLeftButtonText;
+    [SerializeField] private TextMeshProUGUI moveRightButtonText;
+
     [SerializeField] private TextMeshProUGUI gamepadInteractButtonText;
     [SerializeField] private TextMeshProUGUI gamepadAlternateInteractButtonText;
     [SerializeField] private TextMeshProUGUI gamepadPauseButtonText;
@@ -96,6 +101,11 @@ public class OptionsUI : MonoBehaviour
     {
         soundEffectsButtonText.text = $"Sound Effects: {Mathf.Round(SoundManager.Instance.GetVolume() * 10f).ToString()}";
         musicButtonText.text = $"Music: {Mathf.Round(MusicManager.Instance.GetVolume() * 10f).ToString()}";
+
+        moveDownButtonText.text = GameInput.Instance.GetBindingText(GameInput.Binding.MoveDown);
+        moveUpButtonText.text = GameInput.Instance.GetBindingText(GameInput.Binding.MoveUp);
+        moveLeftButtonText.text = GameInput.Instance.GetBindingText(GameInput.Binding.MoveLeft);
+        moveRightButtonText.text = GameInput.Instance.GetBindingText(GameInput.Binding.MoveRight);
 
         interactButtonText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Interact);
         alternateInteractButtonText.text = GameInput.Instance.GetBindingText(GameInput.Binding.InteractAlternate);
