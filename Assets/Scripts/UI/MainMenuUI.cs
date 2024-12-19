@@ -22,4 +22,9 @@ public class MainMenuUI : MonoBehaviour
             Application.Quit();
         });
     }
+
+    private void Start()
+    {
+        playGameButton.Select();
+    }
 }
