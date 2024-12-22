@@ -9,8 +9,10 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
 {
     public event EventHandler OnPickedSomething;
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+    public static event EventHandler OnAnyPlayerSpawned;
+    public static event EventHandler OnAnyPickedSomething;
 
-    //public static Player Instance { get; private set; }
+    public static Player LocalInstance { get; private set; }
 
     public class OnSelectedCounterChangedEventArgs : EventArgs
     {
@@ -33,9 +35,21 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
         GameInput.Instance.OnInteractAction += GameInput_OnInteractAction;
         GameInput.Instance.OnInteractAlternateAction += GameInput_OnInteractAlternateAction;
     }
-    private void Awake()
+
+    public static void ResetStaticData()
     {
-        //Instance = this;
+        OnAnyPlayerSpawned = null;
+        OnAnyPickedSomething = null;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner)
+        {
+            LocalInstance = this;
+        }
+
+        OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
     }
 
     private void GameInput_OnInteractAlternateAction(object sender, EventArgs e)
@@ -165,6 +179,7 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
     {
         this.kitchenObject = kitchenObject;
         OnPickedSomething?.Invoke(this, EventArgs.Empty);
+        OnAnyPickedSomething?.Invoke(this, EventArgs.Empty);
     }
 
     public KitchenObject GetKitchenObject()
@@ -180,5 +195,10 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
     public bool HasKitchenObject()
     {
         return (kitchenObject != null);
+    }
+
+    public NetworkObject GetNetworkObject()
+    {
+        return NetworkObject;
     }
 }
