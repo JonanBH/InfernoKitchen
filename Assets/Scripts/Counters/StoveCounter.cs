@@ -112,16 +112,10 @@ public class StoveCounter : BaseCounter, IHasProgress
 
                     if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
                     {
-                        GetKitchenObject().DestroySelf();
+                        KitchenObject.DestroyKitchenObject(GetKitchenObject());
+                        SetStateIdleServerRpc();
                     }
                 }
-
-                currentState.Value = State.Idle;
-
-                OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
-                {
-                    progressNormalized = 0
-                });
             }
         }
     }
