@@ -91,14 +91,14 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
 
         float moveDistance = moveSpeed * Time.deltaTime;
         float playerRadius = 0.7f;
-        float playerHeight = 2.4f;
+
         bool canMove = !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDir, Quaternion.identity, moveDistance, collisionsLayerMask);
 
         if (!canMove)
         {
 
             Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
-            canMove = (Mathf.Abs(moveDir.x) < .5f) && !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDirX, Quaternion.identity, moveDistance, collisionsLayerMask);
+            canMove = !(Mathf.Abs(moveDir.x) < .5f) && !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDirX, Quaternion.identity, moveDistance, collisionsLayerMask);
 
             if (canMove)
             {
@@ -107,7 +107,7 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
             else
             {
                 Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
-                canMove = (Mathf.Abs(moveDir.z) < .5f) && !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDirZ, Quaternion.identity, moveDistance, collisionsLayerMask);
+                canMove = !(Mathf.Abs(moveDir.z) < .5f) && !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDirZ, Quaternion.identity, moveDistance, collisionsLayerMask);
 
                 if (canMove)
                 {
@@ -117,13 +117,15 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
 
         }
 
+
         if (canMove)
         {
             float rotationSpeed = 0.5f;
             transform.forward = Vector3.Slerp(transform.forward, moveDir, rotationSpeed);
             transform.position += moveDir * moveDistance;
         }
-        isWalking = moveDir != Vector3.zero;
+
+        isWalking = moveDir != Vector3.zero && canMove;
     }
 
     private void HandleInteractions()
