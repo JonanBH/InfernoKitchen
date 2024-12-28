@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Collections;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,6 +17,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     public event EventHandler OnPlayerDataNetworkListChanged;
 
     public static KitchenGameMultiplayer Instance { get; private set; }
+    public static bool playMultiplayer = false;
 
     [SerializeField] private KitchenObjectListSO kitchenObjectListSO;
     [SerializeField] private List<UnityEngine.Color> playerColorList;
@@ -35,6 +37,16 @@ public class KitchenGameMultiplayer : NetworkBehaviour
 
         playerDataNetworkList = new NetworkList<PlayerData>();
         playerDataNetworkList.OnListChanged += PlayerDataNetworkList_OnListChanged;
+    }
+
+    private void Start()
+    {
+        if (!playMultiplayer)
+        {
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData("127.0.0.1", 7777, "0.0.0.0");
+            StartHost();
+            Loader.LoadNetwork(Loader.Scene.GameScene);
+        }
     }
 
     private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent)
