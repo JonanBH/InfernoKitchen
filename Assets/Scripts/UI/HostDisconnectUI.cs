@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using WebSocketSharp;
 
 public class HostDisconnectUI : MonoBehaviour
 {
@@ -21,6 +22,13 @@ public class HostDisconnectUI : MonoBehaviour
         {
             // Server is Shutting down
             Show();
+            return;
+        }
+
+        if(clientId == NetworkManager.Singleton.LocalClientId && NetworkManager.Singleton.DisconnectReason.IsNullOrEmpty())
+        {
+            Show();
+            return;
         }
     }
 
