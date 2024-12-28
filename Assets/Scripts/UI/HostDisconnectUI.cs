@@ -34,6 +34,8 @@ public class HostDisconnectUI : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (!NetworkManager.Singleton) return;
+
         NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_OnClientDisconnectCallback;
     }
 
